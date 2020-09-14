@@ -1,0 +1,38 @@
+Prepare data:
+python3 data/prepare_train_data.py /media/lambert/新加卷1/kitti/raw --dataset-format 'kitti' --dump-root /home/lambert/SSD/DL_project/KITTI/prepared --width 416 --height 128 --num-threads 4 --static-frames data/static_frames.txt --with-depth --with-pose
+
+Train:
+python3 train.py /home/lambert/KITTI/prepared -b4 -m0.2 -s0.1 --epoch-size 3000 --sequence-length 3 --log-output --with-gt
+
+python3 train.py /home/lambert/KITTI/prepared -b4 -m0 -s2.0 --epoch-size 1000 --sequence-length 5 --log-output --with-gt --loss ssim
+
+
+To switch Pose Net:
+Please add "-pn XXX" control in command line.
+XXX is the class name of pose net you wanna use, current choices: PoseExpNet (default), PoseRNN, PoseRNN2, PoseSep.
+
+To use minimum reprojection error:
+Please add "--mini_reproj" control in command line.
+python3 train.py /home/lambert/KITTI/prepared -b4 -m0 -s2.0 --epoch-size 1000 --sequence-length 5 --log-output --with-gt --mini_reproj
+
+To use auto mask:
+Please add "--auto_mask" control in command line.
+python3 train.py /home/lambert/KITTI/prepared -b4 -m0 -s2.0 --epoch-size 1000 --sequence-length 5 --log-output --with-gt --auto_mask
+
+To switch Pose Net encoder:
+Please add "-pn_en XXX" control in command line,
+XXX is the type of pose net encoder you wanna use, current choices: conv(default), resnet.
+
+
+python3 train.py /home/lambert/KITTI/prepared -b4 -m0 -s1e-3 --epoch-size 1000 --sequence-length 5 --log-output --with-gt -disp resnet -pn_en resnet -encoder seperate --loss ssim
+
+12/15 1 a.m.
+python3 train.py /home/lambert/KITTI/prepared -b4 -m0 -s1e-3 --epoch-size 1000 --sequence-length 5 --log-output --with-gt -disp resnet -pn_en resnet -encoder seperate --smooth_type smooth2 --loss ssim
+
+python3 train.py /home/lambert/KITTI/prepared -b4 -m0 -s0.1 --epoch-size 1000 --sequence-length 5 --log-output --with-gt -disp resnet -pn_en resnet -encoder seperate --smooth_type smooth2 --loss ssim
+
+12/15 13 p.m.
+python3 train.py /home/lambert/KITTI/prepared -b4 -m0 -s0.1 --epoch-size 1000 --sequence-length 5 --log-output --with-gt -disp resnet -pn_en resnet -encoder seperate --smooth_type smooth2 --lr 1e-5
+
+python3 train.py /home/lambert/KITTI/prepared -b4 -m0 -s0.5 --epoch-size 1000 --sequence-length 5 --log-output --with-gt -disp resnet -pn_en resnet -encoder seperate --smooth_type smooth2 
+
